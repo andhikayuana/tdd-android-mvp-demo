@@ -1,5 +1,9 @@
 package id.yuana.tdd
 
+import id.yuana.tdd.UserRepository.Companion.AVATAR
+import id.yuana.tdd.UserRepository.Companion.EMAIL
+import id.yuana.tdd.UserRepository.Companion.NAME
+import id.yuana.tdd.UserRepository.Companion.PASWORD
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -23,10 +27,13 @@ class LoginPresenterTest {
     @Mock
     lateinit var view: LoginView
 
+    @Mock
+    lateinit var repository: UserRepository
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = LoginPresenter(view)
+        presenter = LoginPresenter(view, repository)
     }
 
     @After
@@ -43,7 +50,6 @@ class LoginPresenterTest {
         presenter.doLogin()
 
         verify(view).showError()
-
     }
 
     @Test
@@ -63,14 +69,16 @@ class LoginPresenterTest {
     @Test
     fun successLoginWithValidEmailPassword() {
 
-        val dummyEmail = LoginPresenter.EMAIL
-        val dummyPassword = LoginPresenter.PASWORD
+        val dummyEmail = EMAIL
+        val dummyPassword = PASWORD
 
         `when`(view.getEmail()).thenReturn(dummyEmail)
         `when`(view.getPassword()).thenReturn(dummyPassword)
 
+        val dummyUser = User(EMAIL, NAME, AVATAR)
+
         presenter.doLogin()
 
-        verify(view).showSuccess()
+        verify(view).showSuccess(dummyUser)
     }
 }

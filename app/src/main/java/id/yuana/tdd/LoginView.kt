@@ -8,5 +8,7 @@ interface LoginView {
     fun getEmail(): String?
     fun getPassword(): String?
     fun showError()
-    fun showSuccess()
+    fun showSuccess(user: User)
+    fun showLoading()
+    fun dismissLoading()
 }

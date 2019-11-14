@@ -7,8 +7,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class LoginActivity : AppCompatActivity(), LoginView {
 
-    override fun showSuccess() {
-        Toast.makeText(this, getString(R.string.msg_success_login), Toast.LENGTH_SHORT).show()
+    override fun showLoading() {
+        button.text = getString(R.string.txt_loading)
+    }
+
+    override fun dismissLoading() {
+        button.text = getString(R.string.txt_btn_login)
+    }
+
+    override fun showSuccess(user: User) {
+        Toast.makeText(this, getString(R.string.msg_success_login, user.name), Toast.LENGTH_SHORT)
+            .show()
     }
 
     override fun showError() {
@@ -22,7 +31,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
     var loginPresenter: LoginPresenter? = null
 
     init {
-        loginPresenter = LoginPresenter(this)
+        loginPresenter = LoginPresenter(this, UserRepository())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

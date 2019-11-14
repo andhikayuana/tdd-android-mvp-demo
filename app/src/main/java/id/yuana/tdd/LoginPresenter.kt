@@ -4,26 +4,27 @@ package id.yuana.tdd
  * @author Yuana andhikayuana@gmail.com
  * @since Nov, Thu 14 2019 09:23
  **/
-class LoginPresenter(val view: LoginView) {
-
-    companion object {
-        const val EMAIL = "jarjit@mail.com"
-        const val PASWORD = "123456"
-    }
+class LoginPresenter(val view: LoginView, val repository: UserRepository) {
 
     fun doLogin() {
 
-        view.getPassword()
-
         if (isValid()) {
 
-            if (view.getEmail().equals(EMAIL) && view.getPassword().equals(PASWORD)) {
+            val request = mapOf(
+                "email" to view.getEmail(),
+                "password" to view.getPassword()
+            )
 
-                view.showSuccess()
+            view.showLoading()
 
-            } else {
+            repository.login(request, {
+                view.showSuccess(it)
+                view.dismissLoading()
+            }, {
                 view.showError()
-            }
+                view.dismissLoading()
+            })
+
 
         } else {
             view.showError()
